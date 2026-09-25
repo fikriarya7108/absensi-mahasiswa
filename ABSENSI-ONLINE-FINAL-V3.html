@@ -1,0 +1,2767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sistem Absensi Mahasiswa D4 K3</title>
+
+<style>
+
+/* ================================
+   DASAR
+================================ */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f7f9;
+    color:#222;
+}
+
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#0f766e;
+    color:white;
+    padding:25px 15px;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo .icon{
+    font-size:45px;
+}
+
+.logo h2{
+    margin-top:8px;
+}
+
+.logo p{
+    font-size:12px;
+    margin-top:5px;
+    opacity:.8;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin-bottom:8px;
+}
+
+.menu button{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:white;
+    padding:13px;
+    text-align:left;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.menu button:hover,
+.menu button.active{
+    background:rgba(255,255,255,.2);
+}
+
+
+/* ================================
+   MAIN
+================================ */
+
+.main{
+    margin-left:250px;
+    padding:25px;
+}
+
+.header{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.header h1{
+    color:#0f766e;
+    margin-bottom:7px;
+}
+
+.header p{
+    color:#666;
+    font-size:14px;
+}
+
+
+/* ================================
+   PAGE
+================================ */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+
+/* ================================
+   CARD DASHBOARD
+================================ */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.card h3{
+    color:#666;
+    font-size:14px;
+}
+
+.number{
+    font-size:28px;
+    font-weight:bold;
+    color:#0f766e;
+    margin-top:10px;
+}
+
+
+/* ================================
+   BOX
+================================ */
+
+.box{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.box h2{
+    color:#0f766e;
+    margin-bottom:15px;
+}
+
+
+/* ================================
+   FORM
+================================ */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-weight:bold;
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select{
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:7px;
+    outline:none;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:#0f766e;
+}
+
+
+/* ================================
+   BUTTON
+================================ */
+
+.btn{
+    border:none;
+    padding:10px 15px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-primary{
+    background:#0f766e;
+    color:white;
+}
+
+.btn-danger{
+    background:#dc2626;
+    color:white;
+}
+
+.btn-success{
+    background:#16a34a;
+    color:white;
+}
+
+.btn-info{
+    background:#2563eb;
+    color:white;
+}
+
+
+/* ================================
+   TABLE
+================================ */
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#0f766e;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+table td{
+    padding:11px;
+    border-bottom:1px solid #eee;
+}
+
+table tr:hover{
+    background:#f8fafc;
+}
+
+
+/* ================================
+   STATUS
+================================ */
+
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.hadir{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.izin{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.sakit{
+    background:#dbeafe;
+    color:#1e40af;
+}
+
+.alpa{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+
+/* ================================
+   SEARCH
+================================ */
+
+.search-area{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+    flex-wrap:wrap;
+}
+
+.search-area input,
+.search-area select{
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:7px;
+    outline:none;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width:900px){
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        width:70px;
+        padding:15px 8px;
+    }
+
+    .logo h2,
+    .logo p,
+    .menu button span{
+        display:none;
+    }
+
+    .main{
+        margin-left:70px;
+        padding:15px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     SIDEBAR
+===================================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <div class="icon">🎓</div>
+
+        <h2>SIA K3</h2>
+
+        <p>Absensi Mahasiswa</p>
+
+    </div>
+
+
+    <ul class="menu">
+
+        <li>
+
+            <button
+                class="active"
+                onclick="bukaHalaman('dashboard',this)"
+            >
+
+                🏠 <span>Dashboard</span>
+
+            </button>
+
+        </li>
+
+
+        <li>
+
+            <button
+                onclick="bukaHalaman('absensi',this)"
+            >
+
+                📝 <span>Absensi</span>
+
+            </button>
+
+        </li>
+
+
+        <li>
+
+            <button
+                onclick="bukaHalaman('mahasiswa',this)"
+            >
+
+                👨‍🎓 <span>Data Mahasiswa</span>
+
+            </button>
+
+        </li>
+
+
+        <li>
+
+            <button
+                onclick="bukaHalaman('matkul',this)"
+            >
+
+                📚 <span>Mata Kuliah</span>
+
+            </button>
+
+        </li>
+
+
+        <li>
+
+            <button
+                onclick="bukaHalaman('rekap',this)"
+            >
+
+                📊 <span>Rekap Absensi</span>
+
+            </button>
+
+        </li>
+
+
+        <li>
+
+            <button
+                onclick="bukaHalaman('tentang',this)"
+            >
+
+                ℹ️ <span>Tentang</span>
+
+            </button>
+
+        </li>
+
+    </ul>
+
+</div>
+
+
+
+<!-- =====================================
+     MAIN
+===================================== -->
+
+<div class="main">
+
+
+    <div class="header">
+
+        <h1>
+            Sistem Absensi Mahasiswa
+        </h1>
+
+        <p>
+            D4 Keselamatan dan Kesehatan Kerja (K3)
+            — Jurusan Kesehatan Lingkungan
+            — Poltekkes Kemenkes Pontianak
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================
+         DASHBOARD
+    ====================================== -->
+
+    <section
+        id="dashboard"
+        class="page active"
+    >
+
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <h3>
+                    Total Mahasiswa
+                </h3>
+
+                <div
+                    class="number"
+                    id="totalMahasiswa"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Hadir Hari Ini
+                </h3>
+
+                <div
+                    class="number"
+                    id="jumlahHadir"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Izin Hari Ini
+                </h3>
+
+                <div
+                    class="number"
+                    id="jumlahIzin"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Alpa Hari Ini
+                </h3>
+
+                <div
+                    class="number"
+                    id="jumlahAlpa"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="box">
+
+            <h2>
+                📋 Absensi Terbaru
+            </h2>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>No</th>
+
+                            <th>
+                                Nama Mahasiswa
+                            </th>
+
+                            <th>
+                                NIM
+                            </th>
+
+                            <th>
+                                Mata Kuliah
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Jam
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="tabelTerbaru"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         ABSENSI
+    ====================================== -->
+
+    <section
+        id="absensi"
+        class="page"
+    >
+
+
+        <div class="box">
+
+            <h2>
+                📝 Input Absensi
+            </h2>
+
+
+            <div class="form-grid">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Tanggal
+                    </label>
+
+                    <input
+                        type="date"
+                        id="tanggal"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Jam
+                    </label>
+
+                    <input
+                        type="time"
+                        id="jam"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Nama Mahasiswa
+                    </label>
+
+                    <select
+                        id="mahasiswaSelect"
+                        onchange="isiDataMahasiswa()"
+                    ></select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        NIM
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nim"
+                        readonly
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Mata Kuliah
+                    </label>
+
+                    <select
+                        id="matkulSelect"
+                    ></select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Status Kehadiran
+                    </label>
+
+                    <select id="status">
+
+                        <option value="Hadir">
+                            Hadir
+                        </option>
+
+                        <option value="Izin">
+                            Izin
+                        </option>
+
+                        <option value="Sakit">
+                            Sakit
+                        </option>
+
+                        <option value="Alpa">
+                            Alpa
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <br>
+
+
+            <button
+                class="btn btn-primary"
+                onclick="simpanAbsensi()"
+            >
+
+                💾 Simpan Absensi
+
+            </button>
+
+        </div>
+
+
+
+        <!-- DAFTAR ABSENSI -->
+
+        <div class="box">
+
+            <h2>
+                📋 Daftar Absensi
+            </h2>
+
+
+            <div class="search-area">
+
+
+                <input
+                    type="text"
+                    id="cariAbsensi"
+                    placeholder="🔎 Cari nama / NIM..."
+                    onkeyup="tampilkanAbsensi()"
+                >
+
+
+                <input
+                    type="date"
+                    id="filterTanggal"
+                    onchange="tampilkanAbsensi()"
+                >
+
+
+                <select
+                    id="filterStatus"
+                    onchange="tampilkanAbsensi()"
+                >
+
+                    <option value="">
+                        Semua Status
+                    </option>
+
+                    <option value="Hadir">
+                        Hadir
+                    </option>
+
+                    <option value="Izin">
+                        Izin
+                    </option>
+
+                    <option value="Sakit">
+                        Sakit
+                    </option>
+
+                    <option value="Alpa">
+                        Alpa
+                    </option>
+
+                </select>
+
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>No</th>
+
+                            <th>
+                                Tanggal
+                            </th>
+
+                            <th>
+                                Jam
+                            </th>
+
+                            <th>
+                                Nama Mahasiswa
+                            </th>
+
+                            <th>
+                                NIM
+                            </th>
+
+                            <th>
+                                Mata Kuliah
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="tabelAbsensi"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         DATA MAHASISWA
+    ====================================== -->
+
+    <section
+        id="mahasiswa"
+        class="page"
+    >
+
+
+        <div class="box">
+
+            <h2>
+                👨‍🎓 Daftar Mahasiswa
+            </h2>
+
+
+            <div class="search-area">
+
+                <input
+                    type="text"
+                    id="cariMahasiswa"
+                    placeholder="🔎 Cari nama / NIM..."
+                    onkeyup="tampilkanMahasiswa()"
+                >
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                No
+                            </th>
+
+                            <th>
+                                Nama Mahasiswa
+                            </th>
+
+                            <th>
+                                NIM
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="tabelMahasiswa"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         MATA KULIAH
+    ====================================== -->
+
+    <section
+        id="matkul"
+        class="page"
+    >
+
+
+        <div class="box">
+
+            <h2>
+                📚 Mata Kuliah
+            </h2>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                No
+                            </th>
+
+                            <th>
+                                Kode
+                            </th>
+
+                            <th>
+                                Mata Kuliah
+                            </th>
+
+                            <th>
+                                Dosen
+                            </th>
+
+                            <th>
+                                SKS
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="tabelMatkul"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         REKAP
+    ====================================== -->
+
+    <section
+        id="rekap"
+        class="page"
+    >
+
+
+        <div class="box">
+
+            <h2>
+                📊 Rekap Kehadiran
+            </h2>
+
+
+            <div class="search-area">
+
+                <input
+                    type="text"
+                    id="cariRekap"
+                    placeholder="🔎 Cari nama / NIM..."
+                    onkeyup="tampilkanRekap()"
+                >
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                No
+                            </th>
+
+                            <th>
+                                Nama
+                            </th>
+
+                            <th>
+                                NIM
+                            </th>
+
+                            <th>
+                                Hadir
+                            </th>
+
+                            <th>
+                                Izin
+                            </th>
+
+                            <th>
+                                Sakit
+                            </th>
+
+                            <th>
+                                Alpa
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Persentase
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="tabelRekap"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+
+            <br>
+
+
+            <button
+                class="btn btn-success"
+                onclick="exportCSV()"
+            >
+
+                📥 Export CSV
+
+            </button>
+
+
+            <button
+                class="btn btn-info"
+                onclick="window.print()"
+            >
+
+                🖨️ Cetak
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         TENTANG
+    ====================================== -->
+
+    <section
+        id="tentang"
+        class="page"
+    >
+
+
+        <div class="box">
+
+            <h2>
+                ℹ️ Tentang Sistem
+            </h2>
+
+
+            <p>
+                <b>Sistem Absensi Mahasiswa</b>
+            </p>
+
+            <br>
+
+
+            <p>
+                Program Studi:
+                <br>
+                D4 Keselamatan dan Kesehatan Kerja (K3)
+            </p>
+
+            <br>
+
+
+            <p>
+                Jurusan:
+                <br>
+                Kesehatan Lingkungan
+            </p>
+
+            <br>
+
+
+            <p>
+                Poltekkes Kemenkes Pontianak
+            </p>
+
+            <br>
+
+
+            <p>
+                Total mahasiswa:
+                <b id="jumlahTentang">0</b>
+            </p>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ==========================================
+   DATA 62 MAHASISWA
+========================================== */
+
+let mahasiswa = [
+
+    {
+        nama:"FIKRI ARYA DZULFA",
+        nim:"261161016"
+    },
+
+    {
+        nama:"GRANELA FITRI J'ANS",
+        nim:"261161019"
+    },
+
+    {
+        nama:"HERI KUSUMA YUDA",
+        nim:"261161023"
+    },
+
+    {
+        nama:"MARSYA MAULIDIA",
+        nim:"261161033"
+    },
+
+    {
+        nama:"OKTARISA DWI PUTRI",
+        nim:"261161047"
+    },
+
+    {
+        nama:"RAHMANIA AULIA NIZMAH",
+        nim:"261161051"
+    },
+
+    {
+        nama:"SONNY WIJAYA",
+        nim:"261161057"
+    },
+
+    {
+        nama:"INDY ASCHARI PUTRA AGUSTIADY",
+        nim:"261161026"
+    },
+
+    {
+        nama:"NAFTALI HANAFILIA",
+        nim:"261161044"
+    },
+
+    {
+        nama:"MUHAMMAD RAIHAN",
+        nim:"261161040"
+    },
+
+    {
+        nama:"URAY DHAFA RADITYA",
+        nim:"261161059"
+    },
+
+    {
+        nama:"HERDI ALFITRA SALAM",
+        nim:"261161022"
+    },
+
+    {
+        nama:"VASHTI AURA CARISSA",
+        nim:"261161060"
+    },
+
+    {
+        nama:"NAZWA SALSABIL HIWAIDAH",
+        nim:"261161045"
+    },
+
+    {
+        nama:"ZAHWA PUTRI RUSADI",
+        nim:"261161063"
+    },
+
+    {
+        nama:"RIVALDO TRI WAHYUDI",
+        nim:"261161056"
+    },
+
+    {
+        nama:"RAHMA AZZUHRA",
+        nim:"261161050"
+    },
+
+    {
+        nama:"MUHAMMAD HAIKAL KENCANA",
+        nim:"261161037"
+    },
+
+    {
+        nama:"RAISYA RAMADANI",
+        nim:"261161053"
+    },
+
+    {
+        nama:"KEIZIA ZILFANY ABIGEIL",
+        nim:"261161029"
+    },
+
+    {
+        nama:"ALGHIFARI TRYNANDA ARSA JUSAIM",
+        nim:"261161003"
+    },
+
+    {
+        nama:"ECIE TRIFANI",
+        nim:"261161013"
+    },
+
+    {
+        nama:"IBNU DIAZ HANAFIAH",
+        nim:"261161024"
+    },
+
+    {
+        nama:"MOHAMMAD KHOLIL’GAN",
+        nim:"261161035"
+    },
+
+    {
+        nama:"PUTRI NADHIRAH BALQIS",
+        nim:"261161048"
+    },
+
+    {
+        nama:"JONATHAN RAFAEL",
+        nim:"261161027"
+    },
+
+    {
+        nama:"SYAFA AZANI",
+        nim:"261161058"
+    },
+
+    {
+        nama:"DWI RAMADHANI",
+        nim:"261161012"
+    },
+
+    {
+        nama:"NAFISAH ATHIYYAH",
+        nim:"261161043"
+    },
+
+    {
+        nama:"RAISA BILLA",
+        nim:"261161052"
+    },
+
+    {
+        nama:"KEYSA PUTRI GUNARSIH",
+        nim:"261161030"
+    },
+
+    {
+        nama:"FIRZI ZIAURRAHIM",
+        nim:"261161017"
+    },
+
+    {
+        nama:"MICHAEL JESEN",
+        nim:"261161034"
+    },
+
+    {
+        nama:"VIZI SHARIYAR GHANY",
+        nim:"261161061"
+    },
+
+    {
+        nama:"MUHAMMAD RAFI AL RASYID",
+        nim:"261161039"
+    },
+
+    {
+        nama:"RIKKY HERMAWAN",
+        nim:"261161054"
+    },
+
+    {
+        nama:"NADYA KHAIRUNISA",
+        nim:"261161042"
+    },
+
+    {
+        nama:"MUTIA ZALFA",
+        nim:"261161041"
+    },
+
+    {
+        nama:"YOLANDA ROSALINDA",
+        nim:"261161062"
+    },
+
+    {
+        nama:"GUSTI MUHAMMAD IBADUR RAHMAN",
+        nim:"261161021"
+    },
+
+    {
+        nama:"AZZUHRI FADHILLAH",
+        nim:"261161008"
+    },
+
+    {
+        nama:"DHINI TRI MASITHAH",
+        nim:"261161011"
+    },
+
+    {
+        nama:"GREGORIUS REZKY BASTANTA KABAN",
+        nim:"261161020"
+    },
+
+    {
+        nama:"GHISKA FIRSYATUL JANNAH",
+        nim:"261161018"
+    },
+
+    {
+        nama:"FACHRY AJI HABIBI",
+        nim:"261161014"
+    },
+
+    {
+        nama:"NEYLA RAMAHUNISA",
+        nim:"261161046"
+    },
+
+    {
+        nama:"FAHIRA AMELIA",
+        nim:"261161015"
+    },
+
+    {
+        nama:"KHANSA LUTHFIYAH",
+        nim:"261161031"
+    },
+
+    {
+        nama:"MARIA GETI AGUELINA",
+        nim:"261161032"
+    },
+
+    {
+        nama:"ASSYIFA YUMNA HANUM",
+        nim:"261161006"
+    },
+
+    {
+        nama:"AURA NANDITA SALSABILLA",
+        nim:"261161007"
+    },
+
+    {
+        nama:"ANNISA FITRIA RAMADHANI",
+        nim:"261161005"
+    },
+
+    {
+        nama:"BEATA TEOFILIA DINASRI",
+        nim:"261161010"
+    },
+
+    {
+        nama:"RAFIQUL AZMI",
+        nim:"261161049"
+    },
+
+    {
+        nama:"MUHAMMAD JICO YUDHATA",
+        nim:"261161038"
+    },
+
+    {
+        nama:"MUFIDHA NAYLA BAHIRA",
+        nim:"261161036"
+    },
+
+    {
+        nama:"ANNISA FIKRI",
+        nim:"261161004"
+    },
+
+    {
+        nama:"BALQIS ANANDA RISTA",
+        nim:"261161009"
+    },
+
+    {
+        nama:"ABANG ZUHAIR AZZAM",
+        nim:"261161001"
+    },
+
+    {
+        nama:"IBNU KADAVI",
+        nim:"261161025"
+    },
+
+    {
+        nama:"RISKI PASHA HARDIKA",
+        nim:"261161055"
+    },
+
+    {
+        nama:"ADIBA TSABITA RAMADHANTY",
+        nim:"261161002"
+    }
+
+];
+
+
+/* ==========================================
+   URUTKAN A-Z
+========================================== */
+
+mahasiswa.sort(function(a,b){
+
+    return a.nama.localeCompare(
+        b.nama,
+        "id"
+    );
+
+});
+
+
+/* ==========================================
+   MATA KULIAH
+========================================== */
+
+let mataKuliah = [
+
+    {
+        kode:"K3-101",
+        nama:"Dasar Keselamatan dan Kesehatan Kerja",
+        dosen:"Salbiah Kastari, S.ST., M.Kes.",
+        sks:2
+    },
+
+    {
+        kode:"K3-102",
+        nama:"Pendidikan Budaya Anti Korupsi",
+        dosen:"Dosen Pengampu",
+        sks:2
+    },
+
+    {
+        kode:"K3-103",
+        nama:"Pendidikan Agama Islam",
+        dosen:"Dosen Pengampu",
+        sks:2
+    },
+
+    {
+        kode:"K3-104",
+        nama:"Dasar Kesehatan Lingkungan",
+        dosen:"Dosen Pengampu",
+        sks:2
+    },
+
+    {
+        kode:"K3-105",
+        nama:"Pancasila",
+        dosen:"Dosen Pengampu",
+        sks:2
+    }
+
+];
+
+
+/* ==========================================
+   DATA ABSENSI
+========================================== */
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzKCchoqHyCIEx_pTj1sozpns3cPPa49yPZem9wsnpEckiQ50AeOj6NV4s74ad_eqao/exec";
+
+let absensi = [];
+
+async function muatAbsensiDariServer(){
+    try {
+        const response = await fetch(API_URL, { cache: "no-store" });
+        if (!response.ok) throw new Error("Gagal mengambil data server");
+        const data = await response.json();
+        absensi = Array.isArray(data) ? data.map(a => ({
+            tanggal: String(a.tanggal || "").slice(0,10),
+            jam: String(a.jam || "").slice(0,5),
+            nama: String(a.nama || ""),
+            nim: String(a.nim || ""),
+            matkul: String(a.matkul || ""),
+            dosen: "",
+            status: String(a.status || "")
+        })) : [];
+        tampilkanAbsensi();
+        tampilkanRekap();
+        updateDashboard();
+    } catch (error) {
+        console.error(error);
+        alert("Data absensi belum dapat diambil dari server. Periksa koneksi dan URL Web App.");
+    }
+}
+
+
+/* ==========================================
+   SIMPAN
+========================================== */
+
+function simpanData(){
+
+    localStorage.setItem(
+        "absensiD4K3",
+        JSON.stringify(absensi)
+    );
+
+}
+
+
+/* ==========================================
+   TANGGAL HARI INI
+========================================== */
+
+function tanggalHariIni(){
+
+    let sekarang =
+        new Date();
+
+    let tahun =
+        sekarang.getFullYear();
+
+    let bulan =
+        String(
+            sekarang.getMonth()+1
+        ).padStart(2,"0");
+
+    let tanggal =
+        String(
+            sekarang.getDate()
+        ).padStart(2,"0");
+
+    return (
+        tahun +
+        "-" +
+        bulan +
+        "-" +
+        tanggal
+    );
+
+}
+
+
+/* ==========================================
+   JAM SEKARANG
+========================================== */
+
+function jamSekarang(){
+
+    let sekarang =
+        new Date();
+
+    let jam =
+        String(
+            sekarang.getHours()
+        ).padStart(2,"0");
+
+    let menit =
+        String(
+            sekarang.getMinutes()
+        ).padStart(2,"0");
+
+    return jam + ":" + menit;
+
+}
+
+
+document.getElementById(
+    "tanggal"
+).value =
+tanggalHariIni();
+
+
+document.getElementById(
+    "jam"
+).value =
+jamSekarang();
+
+
+/* ==========================================
+   PINDAH HALAMAN
+========================================== */
+
+function bukaHalaman(
+    nama,
+    tombol
+){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(function(page){
+
+        page.classList.remove(
+            "active"
+        );
+
+    });
+
+
+    document
+    .getElementById(nama)
+    .classList.add("active");
+
+
+    document
+    .querySelectorAll(".menu button")
+    .forEach(function(button){
+
+        button.classList.remove(
+            "active"
+        );
+
+    });
+
+
+    tombol.classList.add(
+        "active"
+    );
+
+
+    if(
+        nama === "dashboard"
+    ){
+
+        updateDashboard();
+
+    }
+
+
+    if(
+        nama === "absensi"
+    ){
+
+        // Pastikan dropdown nama dan mata kuliah selalu diisi
+        // setiap kali halaman Absensi dibuka.
+        isiDropdownMahasiswa();
+        isiDropdownMatkul();
+        tampilkanAbsensi();
+
+    }
+
+
+    if(
+        nama === "mahasiswa"
+    ){
+
+        tampilkanMahasiswa();
+
+    }
+
+
+    if(
+        nama === "matkul"
+    ){
+
+        tampilkanMatkul();
+
+    }
+
+
+    if(
+        nama === "rekap"
+    ){
+
+        tampilkanRekap();
+
+    }
+
+}
+
+
+/* ==========================================
+   DROPDOWN MAHASISWA
+========================================== */
+
+function isiDropdownMahasiswa(){
+
+    let select =
+        document.getElementById(
+            "mahasiswaSelect"
+        );
+
+
+    select.innerHTML =
+    `
+    <option value="">
+        -- Pilih Nama Mahasiswa --
+    </option>
+    `;
+
+
+    mahasiswa.forEach(
+        function(m,index){
+
+            select.innerHTML +=
+            `
+            <option value="${index}">
+                ${index+1}. ${m.nama}
+            </option>
+            `;
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   NIM OTOMATIS
+========================================== */
+
+function isiDataMahasiswa(){
+
+    let index =
+        document.getElementById(
+            "mahasiswaSelect"
+        ).value;
+
+
+    if(index === ""){
+
+        document.getElementById(
+            "nim"
+        ).value = "";
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "nim"
+    ).value =
+        mahasiswa[index].nim;
+
+}
+
+
+/* ==========================================
+   DROPDOWN MATA KULIAH
+========================================== */
+
+function isiDropdownMatkul(){
+
+    let select =
+        document.getElementById(
+            "matkulSelect"
+        );
+
+
+    select.innerHTML =
+    `
+    <option value="">
+        -- Pilih Mata Kuliah --
+    </option>
+    `;
+
+
+    mataKuliah.forEach(
+        function(m,index){
+
+            select.innerHTML +=
+            `
+            <option value="${index}">
+                ${m.kode} - ${m.nama}
+            </option>
+            `;
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   SIMPAN ABSENSI
+========================================== */
+
+function simpanAbsensi(){
+
+    let tanggal =
+        document.getElementById(
+            "tanggal"
+        ).value;
+
+
+    let jam =
+        document.getElementById(
+            "jam"
+        ).value;
+
+
+    let mahasiswaIndex =
+        document.getElementById(
+            "mahasiswaSelect"
+        ).value;
+
+
+    let matkulIndex =
+        document.getElementById(
+            "matkulSelect"
+        ).value;
+
+
+    let status =
+        document.getElementById(
+            "status"
+        ).value;
+
+
+    if(
+        tanggal === "" ||
+        jam === "" ||
+        mahasiswaIndex === "" ||
+        matkulIndex === ""
+    ){
+
+        alert(
+            "Lengkapi data absensi terlebih dahulu!"
+        );
+
+        return;
+
+    }
+
+
+    let m =
+        mahasiswa[
+            mahasiswaIndex
+        ];
+
+
+    let mk =
+        mataKuliah[
+            matkulIndex
+        ];
+
+
+    /* CEK ABSEN GANDA */
+
+    let sudahAda =
+        absensi.some(
+            function(a){
+
+                return (
+                    a.tanggal === tanggal &&
+                    a.nim === m.nim &&
+                    a.matkul === mk.nama
+                );
+
+            }
+        );
+
+
+    if(sudahAda){
+
+        alert(
+            "Mahasiswa ini sudah melakukan absensi untuk mata kuliah tersebut pada tanggal ini."
+        );
+
+        return;
+
+    }
+
+
+    const payload = {
+        tanggal: tanggal,
+        jam: jam,
+        nama: m.nama,
+        nim: m.nim,
+        matkul: mk.nama,
+        status: status
+    };
+
+    fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Gagal menyimpan data");
+        return response.json();
+    })
+    .then(hasil => {
+        if (!hasil.success) throw new Error(hasil.message || "Gagal menyimpan data");
+        return muatAbsensiDariServer();
+    })
+    .then(() => {
+        alert("Absensi berhasil disimpan! ✅");
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Absensi gagal disimpan ke server. Coba lagi.");
+    });
+
+
+    /* RESET NAMA */
+
+    document.getElementById(
+        "mahasiswaSelect"
+    ).value = "";
+
+
+    document.getElementById(
+        "nim"
+    ).value = "";
+
+}
+
+
+/* ==========================================
+   TAMPILKAN ABSENSI
+========================================== */
+
+function tampilkanAbsensi(){
+
+    let tbody =
+        document.getElementById(
+            "tabelAbsensi"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    let cari =
+        document.getElementById(
+            "cariAbsensi"
+        ).value.toLowerCase();
+
+
+    let tanggal =
+        document.getElementById(
+            "filterTanggal"
+        ).value;
+
+
+    let status =
+        document.getElementById(
+            "filterStatus"
+        ).value;
+
+
+    let data =
+        absensi.filter(
+            function(a){
+
+                let cocokCari =
+                    a.nama
+                    .toLowerCase()
+                    .includes(cari)
+                    ||
+                    a.nim
+                    .includes(cari);
+
+
+                let cocokTanggal =
+                    tanggal === "" ||
+                    a.tanggal === tanggal;
+
+
+                let cocokStatus =
+                    status === "" ||
+                    a.status === status;
+
+
+                return (
+                    cocokCari &&
+                    cocokTanggal &&
+                    cocokStatus
+                );
+
+            }
+        );
+
+
+    data.forEach(
+        function(a,index){
+
+            let nomor =
+                absensi.indexOf(a);
+
+
+            tbody.innerHTML +=
+            `
+            <tr>
+
+                <td>
+                    ${index+1}
+                </td>
+
+                <td>
+                    ${formatTanggal(a.tanggal)}
+                </td>
+
+                <td>
+                    ${a.jam}
+                </td>
+
+                <td>
+                    ${a.nama}
+                </td>
+
+                <td>
+                    ${a.nim}
+                </td>
+
+                <td>
+                    ${a.matkul}
+                </td>
+
+                <td>
+
+                    <span
+                        class="badge ${a.status.toLowerCase()}"
+                    >
+                        ${a.status}
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="hapusAbsensi(${nomor})"
+                    >
+                        Hapus
+                    </button>
+
+                </td>
+
+            </tr>
+            `;
+
+        }
+    );
+
+
+    if(data.length === 0){
+
+        tbody.innerHTML =
+        `
+        <tr>
+
+            <td
+                colspan="8"
+                style="text-align:center"
+            >
+
+                Belum ada data absensi.
+
+            </td>
+
+        </tr>
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   HAPUS ABSENSI
+========================================== */
+
+async function hapusAbsensi(index){
+
+    let yakin =
+        confirm(
+            "Yakin ingin menghapus data absensi ini?"
+        );
+
+
+    if(!yakin){
+
+        return;
+
+    }
+
+
+    const data = absensi[index];
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({
+                action: "delete",
+                tanggal: data.tanggal,
+                jam: data.jam,
+                nama: data.nama,
+                nim: data.nim,
+                matkul: data.matkul,
+                status: data.status
+            })
+        });
+
+        if (!response.ok) throw new Error("Gagal menghapus data");
+        const hasil = await response.json();
+        if (!hasil.success) throw new Error(hasil.message || "Data tidak ditemukan");
+
+        await muatAbsensiDariServer();
+    } catch (error) {
+        console.error(error);
+        alert("Data gagal dihapus dari server.");
+    }
+
+}
+
+
+/* ==========================================
+   DATA MAHASISWA
+========================================== */
+
+function tampilkanMahasiswa(){
+
+    let tbody =
+        document.getElementById(
+            "tabelMahasiswa"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    let cari =
+        document.getElementById(
+            "cariMahasiswa"
+        ).value.toLowerCase();
+
+
+    let data =
+        mahasiswa.filter(
+            function(m){
+
+                return (
+                    m.nama
+                    .toLowerCase()
+                    .includes(cari)
+                    ||
+                    m.nim
+                    .includes(cari)
+                );
+
+            }
+        );
+
+
+    data.forEach(
+        function(m,index){
+
+            tbody.innerHTML +=
+            `
+            <tr>
+
+                <td>
+                    ${index+1}
+                </td>
+
+                <td>
+                    <b>${m.nama}</b>
+                </td>
+
+                <td>
+                    ${m.nim}
+                </td>
+
+            </tr>
+            `;
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   MATA KULIAH
+========================================== */
+
+function tampilkanMatkul(){
+
+    let tbody =
+        document.getElementById(
+            "tabelMatkul"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    mataKuliah.forEach(
+        function(m,index){
+
+            tbody.innerHTML +=
+            `
+            <tr>
+
+                <td>
+                    ${index+1}
+                </td>
+
+                <td>
+                    ${m.kode}
+                </td>
+
+                <td>
+                    ${m.nama}
+                </td>
+
+                <td>
+                    ${m.dosen}
+                </td>
+
+                <td>
+                    ${m.sks}
+                </td>
+
+            </tr>
+            `;
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   REKAP
+========================================== */
+
+function tampilkanRekap(){
+
+    let tbody =
+        document.getElementById(
+            "tabelRekap"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    let cari =
+        document.getElementById(
+            "cariRekap"
+        ).value.toLowerCase();
+
+
+    let data =
+        mahasiswa.filter(
+            function(m){
+
+                return (
+                    m.nama
+                    .toLowerCase()
+                    .includes(cari)
+                    ||
+                    m.nim
+                    .includes(cari)
+                );
+
+            }
+        );
+
+
+    data.forEach(
+        function(m,index){
+
+            let dataMahasiswa =
+                absensi.filter(
+                    function(a){
+
+                        return (
+                            a.nim === m.nim
+                        );
+
+                    }
+                );
+
+
+            let hadir =
+                dataMahasiswa.filter(
+                    a => a.status === "Hadir"
+                ).length;
+
+
+            let izin =
+                dataMahasiswa.filter(
+                    a => a.status === "Izin"
+                ).length;
+
+
+            let sakit =
+                dataMahasiswa.filter(
+                    a => a.status === "Sakit"
+                ).length;
+
+
+            let alpa =
+                dataMahasiswa.filter(
+                    a => a.status === "Alpa"
+                ).length;
+
+
+            let total =
+                dataMahasiswa.length;
+
+
+            let persentase =
+                total === 0
+                ? 0
+                : Math.round(
+                    (hadir / total) * 100
+                );
+
+
+            tbody.innerHTML +=
+            `
+            <tr>
+
+                <td>
+                    ${index+1}
+                </td>
+
+                <td>
+                    ${m.nama}
+                </td>
+
+                <td>
+                    ${m.nim}
+                </td>
+
+                <td>
+                    ${hadir}
+                </td>
+
+                <td>
+                    ${izin}
+                </td>
+
+                <td>
+                    ${sakit}
+                </td>
+
+                <td>
+                    ${alpa}
+                </td>
+
+                <td>
+                    ${total}
+                </td>
+
+                <td>
+                    <b>
+                        ${persentase}%
+                    </b>
+                </td>
+
+            </tr>
+            `;
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+function updateDashboard(){
+
+    document.getElementById(
+        "totalMahasiswa"
+    ).innerText =
+        mahasiswa.length;
+
+
+    document.getElementById(
+        "jumlahTentang"
+    ).innerText =
+        mahasiswa.length;
+
+
+    let hariIni =
+        tanggalHariIni();
+
+
+    let dataHariIni =
+        absensi.filter(
+            function(a){
+
+                return (
+                    a.tanggal === hariIni
+                );
+
+            }
+        );
+
+
+    let hadir =
+        dataHariIni.filter(
+            a => a.status === "Hadir"
+        ).length;
+
+
+    let izin =
+        dataHariIni.filter(
+            a => a.status === "Izin"
+        ).length;
+
+
+    let alpa =
+        dataHariIni.filter(
+            a => a.status === "Alpa"
+        ).length;
+
+
+    document.getElementById(
+        "jumlahHadir"
+    ).innerText =
+        hadir;
+
+
+    document.getElementById(
+        "jumlahIzin"
+    ).innerText =
+        izin;
+
+
+    document.getElementById(
+        "jumlahAlpa"
+    ).innerText =
+        alpa;
+
+
+    tampilkanTerbaru();
+
+}
+
+
+/* ==========================================
+   ABSENSI TERBARU
+========================================== */
+
+function tampilkanTerbaru(){
+
+    let tbody =
+        document.getElementById(
+            "tabelTerbaru"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    let data =
+        [...absensi]
+        .reverse()
+        .slice(0,10);
+
+
+    data.forEach(
+        function(a,index){
+
+            tbody.innerHTML +=
+            `
+            <tr>
+
+                <td>
+                    ${index+1}
+                </td>
+
+                <td>
+                    ${a.nama}
+                </td>
+
+                <td>
+                    ${a.nim}
+                </td>
+
+                <td>
+                    ${a.matkul}
+                </td>
+
+                <td>
+
+                    <span
+                        class="badge ${a.status.toLowerCase()}"
+                    >
+                        ${a.status}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${a.jam}
+                </td>
+
+            </tr>
+            `;
+
+        }
+    );
+
+
+    if(data.length === 0){
+
+        tbody.innerHTML =
+        `
+        <tr>
+
+            <td
+                colspan="6"
+                style="text-align:center"
+            >
+
+                Belum ada absensi.
+
+            </td>
+
+        </tr>
+        `;
+
+    }
+
+}
+
+
+/* ==========================================
+   FORMAT TANGGAL
+========================================== */
+
+function formatTanggal(tanggal){
+
+    if(!tanggal){
+
+        return "-";
+
+    }
+
+
+    let bagian =
+        tanggal.split("-");
+
+
+    return (
+        bagian[2] +
+        "-" +
+        bagian[1] +
+        "-" +
+        bagian[0]
+    );
+
+}
+
+
+/* ==========================================
+   EXPORT CSV
+========================================== */
+
+function exportCSV(){
+
+    let csv =
+        "No,Tanggal,Jam,Nama,NIM,Mata Kuliah,Dosen,Status\n";
+
+
+    absensi.forEach(
+        function(a,index){
+
+            csv +=
+                `${index+1},` +
+                `"${a.tanggal}",` +
+                `"${a.jam}",` +
+                `"${a.nama}",` +
+                `"${a.nim}",` +
+                `"${a.matkul}",` +
+                `"${a.dosen}",` +
+                `"${a.status}"\n`;
+
+        }
+    );
+
+
+    let blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    let url =
+        URL.createObjectURL(blob);
+
+
+    let link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+
+    link.download =
+        "rekap-absensi-D4-K3.csv";
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* ==========================================
+   JALANKAN APLIKASI
+========================================== */
+
+function inisialisasiAplikasi(){
+    // Isi form terlebih dahulu supaya daftar nama tidak pernah kosong.
+    isiDropdownMahasiswa();
+    isiDropdownMatkul();
+
+    try { tampilkanMahasiswa(); } catch (e) { console.error(e); }
+    try { tampilkanMatkul(); } catch (e) { console.error(e); }
+    try { muatAbsensiDariServer(); } catch (e) { console.error(e); }
+
+    // Pengaman: bila browser menunda rendering, isi ulang dropdown sekali lagi.
+    setTimeout(function(){
+        isiDropdownMahasiswa();
+        isiDropdownMatkul();
+    }, 100);
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", inisialisasiAplikasi);
+} else {
+    inisialisasiAplikasi();
+}
+
+</script>
+
+</body>
+</html>
